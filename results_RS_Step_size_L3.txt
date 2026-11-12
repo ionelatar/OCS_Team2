@@ -1,0 +1,12 @@
+
+#  Table 2 for D = 10, MaxFE = 10000 * D
+# F1 for sigmas: [0.01, 0.05, 0.1, 0.3]: ['1.24', '33.1', '134', '1.1e+03']
+# F3 for sigmas: [0.01, 0.05, 0.1, 0.3]: ['7.17e+04', '2.14e+05', '5.07e+05', '2.47e+06']
+
+# Turning Point for  F1
+# Sigma = 0.001 -> Median for errors = 0.012630180452872435
+# Sigma = 0.0003333333333333333 -> Median for errors = 0.0014856890691087165
+# Sigma = 0.0001111111111111111 -> Median for errors = 0.00017851586807797237
+# Sigma = 3.7037037037037037e-05 -> Median for errors = 5686.531708183324
+
+# Turning point found for F1
