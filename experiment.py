@@ -3,10 +3,9 @@ from oracle import Oracle
 from scipy.optimize import minimize
 from cec05 import make_cec05 #your code for CEC2005 or the
 from rs import pure_random_search, localized_random_search #implementations of RS an PRS
-
+from rs import solis_wets
 import time
-
-
+from scipy.stats import friedmanchisquare, wilcoxon
 
 def nm(o, rng): #nedler-mead
     x0 = rng.uniform(o.lb, o.ub)
@@ -15,10 +14,13 @@ def nm(o, rng): #nedler-mead
                 options={'maxfev': o.max_fe, 'xatol': 1e-12, 'fatol': 1e-12})
     except StopIteration:
         pass
-ALGS = {'NM': nm,
-        'PRS': pure_random_search,
-        'LRS': lambda o, r: localized_random_search(o, r, sigma=0.05)}
 
+ALGS = {
+    'NM': nm,
+    'PRS': pure_random_search,
+    'LRS': localized_random_search,  
+    'SW': solis_wets
+}
 def run_one(alg, f, D, lo, hi, seed):
     o = Oracle(f, [lo] * D, [hi] * D, max_fe=1000 * D)
     ALGS[alg](o, np.random.default_rng(seed))
@@ -35,7 +37,10 @@ if __name__ == '__main__':
                     err, fe, _ = run_one(alg, f, D, lo, hi, seed)
                     rows.append((alg, fname, D, seed, err, fe))
     df = pd.DataFrame(rows, columns=['alg', 'func', 'D', 'run', 'error', 'fe'])
-    df.to_csv('l2_results.csv', index=False)
+    df.to_csv('l3_results.csv', index=False)
+
 
     elapsed = time.perf_counter() - start
     print(f"Runtime: {elapsed:.2f} s")
+
+    
