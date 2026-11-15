@@ -66,3 +66,32 @@ def solis_wets(o, rng):
                     fail = 0
     except StopIteration:
         pass
+
+def localized_random_search_restarts(o, rng, sigma=0.1, max_stall=100):
+    lo = o.lb
+    hi = o.ub
+    D = len(lo)
+    step = sigma * (hi - lo)
+
+    try:
+        x = rng.uniform(lo, hi)
+        fx = o(x)
+        stall = 0
+
+        while o.fe < o.max_fe:
+            cand = x + rng.normal(0.0, step, size=D)
+            fcand = o(cand)
+
+            if fcand < fx:
+                x = cand
+                fx = fcand
+                stall = 0
+            else:
+                stall += 1
+
+            if stall >= max_stall and o.fe < o.max_fe:
+                x = rng.uniform(lo, hi)
+                fx = o(x)
+                stall = 0
+    except StopIteration:
+        pass

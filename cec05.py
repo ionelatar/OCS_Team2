@@ -27,6 +27,10 @@ def Schwefel_Global_Optimum_On_Bounds(x, o):
     A = rng.integers(-50, 51, size=(D, D))
     B = A @ o
     return np.max(np.abs(A @ x - B))
+    
+def rastrigin(x):
+    x = np.asarray(x, dtype=float)
+    return 10.0 * len(x) + np.sum(x**2 - 10.0 * np.cos(2.0 * np.pi * x))
 
 
 def make_cec05(D, seed=42):
