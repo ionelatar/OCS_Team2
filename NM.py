@@ -4,9 +4,9 @@ from oracle import Oracle
 from cec05 import make_cec05
 
 
-def nm_restart(o, rng):
+def nm(o, rng):
     try:
-        while not o.exhausted:
+        while o.fe < o.max_fe:
             minimize(
                 o,
                 rng.uniform(o.lb, o.ub),

@@ -12,18 +12,16 @@ def localized_random_search(o, rng, sigma=0.1):
     try:
         x = rng.uniform(o.lb, o.ub)
         current_val = o(x)
-        
-        span = (o.ub - o.lb) * sigma
-        
+        step_std = (np.asarray(o.ub) - np.asarray(o.lb)) * sigma
         while True:
-            x_new = x + rng.uniform(-span, span, size=o.lb.shape)
-            x_new = np.clip(x_new, o.lb, o.ub)  
+            x_new = np.clip(x + rng.normal(0.0, step_std, size=o.lb.shape), o.lb, o.ub)
             val = o(x_new)
             if val < current_val:
                 x = x_new
                 current_val = val
     except StopIteration:
         pass
+        
 def solis_wets(o, rng):
     D = len(o.lb)
     span = o.ub - o.lb
@@ -37,7 +35,7 @@ def solis_wets(o, rng):
             
             while np.max(sigma) >= 1e-8:
                 d = rng.normal(0.0, sigma, size=D)
-                x_plus = x + b + d
+                x_plus = np.clip(x + b + d, o.lb, o.ub)
                 f_plus = o(x_plus)
                 
                 if f_plus < fx:
@@ -47,7 +45,7 @@ def solis_wets(o, rng):
                     succ += 1
                     fail = 0
                 else:
-                    x_minus = x - b - d
+                    x_minus = np.clip(x - b - d, o.lb, o.ub)
                     f_minus = o(x_minus)
                     if f_minus < fx:
                         x = np.clip(x_minus, o.lb, o.ub)

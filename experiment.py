@@ -6,23 +6,15 @@ from rs import pure_random_search, localized_random_search #implementations of R
 from rs import solis_wets
 import time
 from scipy.stats import friedmanchisquare, wilcoxon
-
-def nm(o, rng): #nedler-mead
-    x0 = rng.uniform(o.lb, o.ub)
-    try:
-        minimize(o, x0, method='Nelder-Mead',
-                options={'maxfev': o.max_fe, 'xatol': 1e-12, 'fatol': 1e-12})
-    except StopIteration:
-        pass
+from NM import nm
 
 ALGS = {
-    'NM': nm,
     'PRS': pure_random_search,
-    'LRS': localized_random_search,  
+    'LRS': localized_random_search, 
     'SW': solis_wets
 }
 def run_one(alg, f, D, lo, hi, seed):
-    o = Oracle(f, [lo] * D, [hi] * D, max_fe=1000 * D)
+    o = Oracle(f, [lo] * D, [hi] * D, max_fe=10000 * D)
     ALGS[alg](o, np.random.default_rng(seed))
     return o.best_f, o.fe, o.trace
 
