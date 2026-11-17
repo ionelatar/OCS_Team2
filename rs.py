@@ -22,7 +22,7 @@ def localized_random_search(o, rng, sigma=0.1):
     except StopIteration:
         pass
         
-def solis_wets(o, rng):
+def solis_wets(o, rng, S=5, F=3):
     D = len(o.lb)
     span = o.ub - o.lb
     try:
@@ -58,10 +58,10 @@ def solis_wets(o, rng):
                         succ = 0
                         fail += 1
                 
-                if succ >= 5:
+                if succ >= S:
                     sigma *= 2.0
                     succ = 0
-                elif fail >= 3:
+                elif fail >= F:
                     sigma *= 0.5
                     fail = 0
     except StopIteration:
